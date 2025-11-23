@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+<!DOCTYPE ahtml>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Information Form</title>
+    <title>Middle School Registration</title> <!-- BROWSER TAB TITLE -->
     <!-- Include Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Include Supabase client -->
@@ -12,6 +12,24 @@
         /* Using Inter font */
         body {
             font-family: 'Inter', sans-serif;
+            overflow: hidden; /* Hide scrollbar caused by canvas */
+        }
+        /* Style for the interactive canvas background - LIGHT MODE (Teal/Blue-Green background) */
+        #interactive-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            /* Light opacity for a subtle, non-distracting effect */
+            opacity: 0.6; 
+            /* Removed explicit background color here to use the body's Tailwind bg-teal-100 */
+        }
+        /* Ensure the form content is above the canvas */
+        .form-container {
+            position: relative;
+            z-index: 10;
         }
     </style>
     <!-- Include Inter font from Google Fonts -->
@@ -19,9 +37,19 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+<body class="bg-teal-100 min-h-screen flex items-center justify-center p-4">
 
-    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+    <!-- Interactive Background Canvas -->
+    <canvas id="interactive-bg"></canvas>
+
+    <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md form-container">
+        
+        <!-- HEADER SECTION (NEW CUSTOM TITLE) -->
+        <div class="mb-8 text-center">
+            <h1 class="text-3xl font-bold text-blue-600">hi my friends this is the form</h1>
+            <!-- Subtitle removed -->
+        </div>
+        <!-- END HEADER SECTION -->
         
         <!-- Form starts here -->
         <form id="student-form" action="#" method="POST">
@@ -29,10 +57,11 @@
                 
                 <!-- Student ID Field -->
                 <div>
-                    <label for="student-id" class="block text-sm font-medium text-gray-700">Student ID</label>
+                    <!-- Updated text color for light mode -->
+                    <label for="student-id" class="block text-sm font-medium text-gray-700">Student ID</label> 
                     <div class="mt-1">
                         <input type="text" name="student-id" id="student-id" 
-                               class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-3 border"
+                               class="block w-full rounded-md border-gray-300 bg-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-3 border text-gray-900"
                                placeholder="e.g., 12345678" required>
                     </div>
                 </div>
@@ -43,7 +72,7 @@
                     <div class="mt-1">
                         <input type="text" name="full-name" id="full-name" 
                                autocomplete="name"
-                               class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-3 border"
+                               class="block w-full rounded-md border-gray-300 bg-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-3 border text-gray-900"
                                placeholder="e.g., Jane Doe" required>
                     </div>
                 </div>
@@ -54,15 +83,28 @@
                     <div class="mt-1">
                         <input id="school-email" name="school-email" type="email" 
                                autocomplete="email"
-                               class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-3 border"
+                               class="block w-full rounded-md border-gray-300 bg-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-3 border text-gray-900"
                                placeholder="e.g., jane.doe@school.edu" required>
                     </div>
                 </div>
+                
+                <!-- Grade Level Dropdown (7th & 8th Grade) -->
+                <div>
+                    <label for="grade-level" class="block text-sm font-medium text-gray-700">Current Grade Level</label>
+                    <div class="mt-1">
+                        <select id="grade-level" name="grade-level" required
+                                class="block w-full rounded-md border-gray-300 bg-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-3 border text-gray-900">
+                            <option value="">-- Select Grade --</option>
+                            <option value="7">7th Grade</option>
+                            <option value="8">8th Grade</option>
+                        </select>
+                    </div>
+                </div>
 
-                <!-- Submit Button -->
+                <!-- Submit Button (BLUE ACCENT) -->
                 <div>
                     <button type="submit" id="submit-button"
-                            class="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50">
+                            class="flex w-full justify-center rounded-md border border-transparent bg-blue-600 py-3 px-4 text-sm font-medium text-white shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white disabled:opacity-50 transition duration-150 ease-in-out">
                         Submit
                     </button>
                 </div>
@@ -78,7 +120,6 @@
 
     <script type="module">
         // 1. Initialize Supabase
-        // The keys below are your project keys!
         const SUPABASE_URL = 'https://egqfothiwzcbyajaiftj.supabase.co'; 
         const SUPABASE_KEY = 'sb_publishable_8PphXvTLOpaqfbRlh_1W7A_ka4j7wXZ'; 
 
@@ -92,37 +133,33 @@
 
         // 3. Listen for the form submission
         studentForm.addEventListener('submit', async (event) => {
-            event.preventDefault(); // Stop the form from submitting the old way
+            event.preventDefault(); 
 
             // Disable button and show loading text
             submitButton.disabled = true;
             submitButton.textContent = 'Submitting...';
-            messageArea.textContent = ''; // Clear old messages
+            messageArea.textContent = ''; 
 
-            // Get form values
+            // Get form values, including the grade level
             const studentId = document.getElementById('student-id').value;
             const fullName = document.getElementById('full-name').value.trim();
             const schoolEmail = document.getElementById('school-email').value;
+            const gradeLevel = document.getElementById('grade-level').value; 
 
             // --- Logic to split Full Name ---
             let firstName = '';
             let lastName = '';
-            
-            // Split the full name by spaces
             const nameParts = fullName.split(/\s+/).filter(p => p.length > 0);
             
             if (nameParts.length > 0) {
-                // The first word is considered the first name
                 firstName = nameParts[0]; 
             }
-
-            if (nameParts.length > 1) {
-                // The rest of the words are combined and considered the last name
+            if (nameParts.length > 1) { 
                 lastName = nameParts.slice(1).join(' '); 
             }
             // ---------------------------------
 
-            // 4. Send data to Supabase
+            // 4. Send data to Supabase (includes the new grade_level field)
             const { error } = await supabaseClient
                 .from('students')
                 .insert([
@@ -130,7 +167,8 @@
                         student_id: studentId, 
                         first_name: firstName, 
                         last_name: lastName,   
-                        school_email: schoolEmail
+                        school_email: schoolEmail,
+                        grade_level: gradeLevel 
                     }
                 ]);
 
@@ -140,7 +178,6 @@
                 
                 let errorMessage = `Error: Submission failed.`;
                 
-                // Supabase error code for unique constraint violation is '23505'
                 if (error.code === '23505') {
                     if (error.message.includes('student_id')) {
                         errorMessage = `Error: This Student ID has already been submitted.`;
@@ -148,7 +185,6 @@
                         errorMessage = `Error: This School Email has already been used.`;
                     }
                 }
-                // Check for RLS error
                 else if (error.code === 'PGRST001' || error.message.includes('permission denied')) {
                      errorMessage = `Error: Cannot save data. Check RLS policies for the 'students' table.`;
                 } 
@@ -159,20 +195,131 @@
                 submitButton.textContent = 'Submit';
             } else {
                 // Handle success
-                messageArea.textContent = 'Form submitted successfully!';
-                messageArea.className = 'text-sm text-center text-green-600 font-medium';
+                messageArea.textContent = 'Form submitted successfully! Thank you.';
+                messageArea.className = 'text-sm text-center text-green-700 font-medium'; 
                 
-                // Clear the form
                 studentForm.reset(); 
                 
-                // Re-enable button after a short delay
                 setTimeout(() => {
                     submitButton.disabled = false;
                     submitButton.textContent = 'Submit';
-                    messageArea.textContent = ''; // Clear success message
-                }, 3000); // 3 seconds
+                    messageArea.textContent = '';
+                }, 3000); 
             }
         });
+
+        // ----------------------------------------------------
+        // Interactive Background Script (Subtle Magenta Network)
+        // ----------------------------------------------------
+
+        const canvas = document.getElementById('interactive-bg');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        let particles = [];
+        let mouse = { x: -999, y: -999 }; // Initialize off-screen
+
+        function resizeCanvas() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+
+        function createParticles() {
+            particles = [];
+            // Particle density is still high, but colors are light
+            const count = Math.floor((width * height) / 7000); 
+            for (let i = 0; i < count; i++) {
+                particles.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    radius: Math.random() * 1.8 + 0.8, 
+                    vx: (Math.random() - 0.5) * 0.4, 
+                    vy: (Math.random() - 0.5) * 0.4,
+                    // Magenta color for dots (subtle complement to teal)
+                    color: `rgba(255, 0, 150, 0.5)` 
+                });
+            }
+        }
+
+        function draw() {
+            // Clear the canvas on each frame
+            ctx.clearRect(0, 0, width, height);
+
+            // Maximum distance for drawing a connecting line
+            const connectionDistance = 150; 
+
+            particles.forEach((p, i) => {
+                // 1. Movement
+                p.x += p.vx;
+                p.y += p.vy;
+
+                // Simple boundary bounce
+                if (p.x < 0 || p.x > width) p.vx *= -1;
+                if (p.y < 0 || p.y > height) p.vy *= -1;
+
+                // 2. Mouse Repulsion
+                const dx_mouse = p.x - mouse.x;
+                const dy_mouse = p.y - mouse.y;
+                const dist_mouse = Math.sqrt(dx_mouse * dx_mouse + dy_mouse * dy_mouse);
+
+                if (dist_mouse < connectionDistance) {
+                    const force = 0.05 * (1 - dist_mouse / connectionDistance);
+                    p.x += dx_mouse * force; 
+                    p.y += dy_mouse * force; 
+                }
+
+                // 3. Draw Connections (Network Effect)
+                for (let j = i + 1; j < particles.length; j++) {
+                    const p2 = particles[j];
+                    const dx = p.x - p2.x;
+                    const dy = p.y - p2.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < connectionDistance) {
+                        // Calculate opacity based on distance (closer = brighter line)
+                        const opacity = 1 - (dist / connectionDistance); 
+
+                        ctx.beginPath();
+                        // Very subtle magenta lines
+                        ctx.strokeStyle = `rgba(255, 0, 150, ${opacity * 0.2})`; 
+                        ctx.lineWidth = 0.8; 
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                    }
+                }
+                
+                // 4. Draw Particle
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2, false);
+                ctx.fillStyle = p.color;
+                ctx.fill();
+            });
+
+            requestAnimationFrame(draw);
+        }
+
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            createParticles();
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+        
+        // Handle touch moves for mobile interaction
+        document.addEventListener('touchmove', (e) => {
+             if (e.touches.length > 0) {
+                mouse.x = e.touches[0].clientX;
+                mouse.y = e.touches[0].clientY;
+             }
+        }, { passive: true });
+
+        // Initial setup
+        resizeCanvas();
+        createParticles();
+        draw();
     </script>
 
 </body>
