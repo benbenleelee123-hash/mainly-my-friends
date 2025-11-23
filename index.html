@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Information Form</title>
+    <!-- Include Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Include Supabase client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        /* Using Inter font */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+    <!-- Include Inter font from Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+        
+        <!-- Form starts here -->
+        <form id="student-form" action="#" method="POST">
+            <div class="space-y-6">
+                
+                <!-- Student ID Field -->
+                <div>
+                    <label for="student-id" class="block text-sm font-medium text-gray-700">Student ID</label>
+                    <div class="mt-1">
+                        <input type="text" name="student-id" id="student-id" 
+                               class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-3 border"
+                               placeholder="e.g., 12345678">
+                    </div>
+                </div>
+                
+                <!-- FULL NAME Field (Combined) -->
+                <div>
+                    <label for="full-name" class="block text-sm font-medium text-gray-700">Full Name</label>
+                    <div class="mt-1">
+                        <input type="text" name="full-name" id="full-name" 
+                               autocomplete="name"
+                               class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-3 border"
+                               placeholder="e.g., Jane Doe">
+                    </div>
+                </div>
+
+                <!-- School Email Field -->
+                <div>
+                    <label for="school-email" class="block text-sm font-medium text-gray-700">School Email</label>
+                    <div class="mt-1">
+                        <input id="school-email" name="school-email" type="email" 
+                               autocomplete="email"
+                               class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-3 border"
+                               placeholder="e.g., jane.doe@school.edu">
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div>
+                    <button type="submit" id="submit-button"
+                            class="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50">
+                        Submit
+                    </button>
+                </div>
+
+                <!-- Message area for success or error -->
+                <div id="message-area" class="text-sm text-center"></div>
+                
+            </div>
+        </form>
+        <!-- Form ends here -->
+        
+    </div>
+
+    <script type="module">
+        // 1. Initialize Supabase
+        // The keys below are now your actual project keys!
+        const SUPABASE_URL = 'https://egqfothiwzcbyajaiftj.supabase.co'; 
+        const SUPABASE_KEY = 'sb_publishable_8PphXvTLOpaqfbRlh_1W7A_ka4j7wXZ'; 
+
+        const { createClient } = supabase;
+        const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // 2. Get elements from the page
+        const studentForm = document.getElementById('student-form');
+        const submitButton = document.getElementById('submit-button');
+        const messageArea = document.getElementById('message-area');
+
+        // 3. Listen for the form submission
+        studentForm.addEventListener('submit', async (event) => {
+            event.preventDefault(); // Stop the form from submitting the old way
+
+            // Disable button and show loading text
+            submitButton.disabled = true;
+            submitButton.textContent = 'Submitting...';
+            messageArea.textContent = ''; // Clear old messages
+
+            // Get form values
+            const studentId = document.getElementById('student-id').value;
+            const fullName = document.getElementById('full-name').value.trim();
+            const schoolEmail = document.getElementById('school-email').value;
+
+            // --- Logic to split Full Name ---
+            let firstName = '';
+            let lastName = '';
+            
+            // Split the full name by spaces
+            const nameParts = fullName.split(/\s+/).filter(p => p.length > 0);
+            
+            if (nameParts.length > 0) {
+                // The first word is considered the first name
+                firstName = nameParts[0]; 
+            }
+
+            if (nameParts.length > 1) {
+                // The rest of the words are combined and considered the last name
+                lastName = nameParts.slice(1).join(' '); 
+            }
+            // ---------------------------------
+
+            // 4. Send data to Supabase
+            // This assumes your table is named 'students'
+            const { error } = await supabaseClient
+                .from('students')
+                .insert([
+                    { 
+                        student_id: studentId, 
+                        first_name: firstName, 
+                        last_name: lastName,   
+                        school_email: schoolEmail
+                    }
+                ]);
+
+            if (error) {
+                // Handle error
+                console.error('Error inserting data:', error);
+                // Check for RLS error which is common
+                if (error.code === 'PGRST001' || error.message.includes('permission denied')) {
+                     messageArea.textContent = `Error: Cannot save data. Please check your Supabase Row Level Security (RLS) policies for the 'students' table.`;
+                } else {
+                     messageArea.textContent = `Error: ${error.message}`;
+                }
+                messageArea.className = 'text-sm text-center text-red-600 font-medium';
+                submitButton.disabled = false;
+                submitButton.textContent = 'Submit';
+            } else {
+                // Handle success
+                messageArea.textContent = 'Form submitted successfully!';
+                messageArea.className = 'text-sm text-center text-green-600 font-medium';
+                
+                // Clear the form
+                studentForm.reset(); 
+                
+                // Re-enable button after a short delay
+                setTimeout(() => {
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Submit';
+                    messageArea.textContent = ''; // Clear success message
+                }, 3000); // 3 seconds
+            }
+        });
+    </script>
+
+</body>
+</html>
