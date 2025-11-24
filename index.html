@@ -3,178 +3,391 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- UPDATED: Browser Tab Title -->
+    <!-- Browser Tab Title -->
     <title>davidsfriends</title> 
-    <!-- NEW: Custom Heart Logo (Favicon) for the Browser Tab -->
-    <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0OCIgZmlsbD0iIzI1NjNFQiIvPjx0ZXh0IHg9IjUwJSIgeT0iNjAlIiBkb21pbm5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSI2MCIgZmlsbD0id2hpdGUiPuKUgTwvdGV4dD48L3N2ZyE=" type="image/svg+xml">
+    <!-- Custom Heart Logo (Favicon) for the Browser Tab -->
+    <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My4wcmcvMjAwMC9zdmcgeD0iMHB4IiB5PSIwcHgiIHZpZXdCb3g9IjAgMCAxMDAgMTAwIiBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCAxMDAgMTAwIiB4bWw6c3BhY2U9InByZXNlcnZlIj48Y2lyY2xlIGZpbGw9IiMyNTY1RUIiIGN4PSI1MCIgY3k9IjUwIiByPSI0OCIvPjx0ZXh0IHg9IjUwJSIgeT0iNjAlIiBkb21pbm5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSI2MCIgZmlsbD0id2hpdGUiPuKUgTwvdGV4dD48L2NpcmNsZT48L2NpcmNsZT48L3N2ZyHl">
     
     <!-- Include Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Include Supabase client -->
+    <!-- Include Supabase client for Database operations -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style>
-        /* Using Inter font */
-        body {
-            font-family: 'Inter', sans-serif;
-            overflow: hidden; /* Hide scrollbar caused by canvas */
-        }
-        /* Style for the interactive canvas background - LIGHT MODE (Teal/Blue-Green background) */
-        #interactive-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            /* Light opacity for a subtle, non-distracting effect */
-            opacity: 0.6; 
-        }
-        /* Ensure the form content is above the canvas */
-        .form-container {
-            position: relative;
-            z-index: 10;
-        }
-    </style>
-    <!-- Include Inter font from Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-</head>
-<body class="bg-teal-100 min-h-screen flex items-center justify-center p-4">
-
-    <!-- Interactive Background Canvas -->
-    <canvas id="interactive-bg"></canvas>
-
-    <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md form-container">
-        
-        <!-- HEADER SECTION -->
-        <div class="mb-8 text-center">
-            <h1 class="text-3xl font-bold text-blue-600">hi my friends this is the form</h1>
-        </div>
-        <!-- END HEADER SECTION -->
-        
-        <!-- Form starts here -->
-        <form id="student-form" action="#" method="POST">
-            <div class="space-y-6">
-                
-                <!-- Student ID Field -->
-                <div>
-                    <!-- Updated text color for light mode -->
-                    <label for="student-id" class="block text-sm font-medium text-gray-700">Student ID</label> 
-                    <div class="mt-1">
-                        <input type="text" name="student-id" id="student-id" 
-                               class="block w-full rounded-md border-gray-300 bg-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-3 border text-gray-900"
-                               placeholder="12345678" required>
-                    </div>
-                </div>
-                
-                <!-- FULL NAME Field (Combined) -->
-                <div>
-                    <label for="full-name" class="block text-sm font-medium text-gray-700">Full Name</label>
-                    <div class="mt-1">
-                        <input type="text" name="full-name" id="full-name" 
-                               autocomplete="name"
-                               class="block w-full rounded-md border-gray-300 bg-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-3 border text-gray-900"
-                               placeholder="Jane Doe" required>
-                    </div>
-                </div>
-
-                <!-- School Email Field -->
-                <div>
-                    <label for="school-email" class="block text-sm font-medium text-gray-700">School Email</label>
-                    <div class="mt-1">
-                        <input id="school-email" name="school-email" type="email" 
-                               autocomplete="email"
-                               class="block w-full rounded-md border-gray-300 bg-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-3 border text-gray-900"
-                               placeholder="jane.doe@school.edu" required>
-                    </div>
-                </div>
-                
-                <!-- Grade Level Dropdown (K-12 Grades) -->
-                <div>
-                    <label for="grade-level" class="block text-sm font-medium text-gray-700">Current Grade Level</label>
-                    <div class="mt-1">
-                        <select id="grade-level" name="grade-level" required
-                                class="block w-full rounded-md border-gray-300 bg-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-3 border text-gray-900">
-                            <option value="">-- Select Grade --</option>
-                            <option value="K">Kindergarten</option>
-                            <option value="1">1st Grade</option>
-                            <option value="2">2nd Grade</option>
-                            <option value="3">3rd Grade</option>
-                            <option value="4">4th Grade</option>
-                            <option value="5">5th Grade</option>
-                            <option value="6">6th Grade</option>
-                            <option value="7">7th Grade</option>
-                            <option value="8">8th Grade</option>
-                            <option value="9">9th Grade</option>
-                            <option value="10">10th Grade</option>
-                            <option value="11">11th Grade</option>
-                            <option value="12">12th Grade</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <!-- Referral ID Field has been removed -->
-                
-                <!-- Submit Button (BLUE ACCENT) -->
-                <div>
-                    <button type="submit" id="submit-button"
-                            class="flex w-full justify-center rounded-md border border-transparent bg-blue-600 py-3 px-4 text-sm font-medium text-white shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white disabled:opacity-50 transition duration-150 ease-in-out">
-                        Submit
-                    </button>
-                </div>
-
-                <!-- Message area for success or error -->
-                <div id="message-area" class="text-sm text-center"></div>
-                
-            </div>
-        </form>
-        <!-- Form ends here -->
-        
-    </div>
-
+    <!-- Include Firebase client for Authentication -->
     <script type="module">
-        // 1. Initialize Supabase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        // Ensure 'signOut' is imported
+        import { getAuth, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        
+        // Firebase Auth Setup
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        
+        // Supabase DB Setup
         const SUPABASE_URL = 'https://egqfothiwzcbyajaiftj.supabase.co'; 
         const SUPABASE_KEY = 'sb_publishable_8PphXvTLOpaqfbRlh_1W7A_ka4j7wXZ'; 
-
         const { createClient } = supabase;
         const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // 2. Get elements from the page
+        // Get elements
+        const authStatusElement = document.getElementById('auth-status');
         const studentForm = document.getElementById('student-form');
         const submitButton = document.getElementById('submit-button');
         const messageArea = document.getElementById('message-area');
+        const formView = document.getElementById('form-view');
+        const deleteView = document.getElementById('delete-view');
+        const deleteNavSection = document.getElementById('delete-nav-section');
 
-        // 3. Listen for the form submission
+        // State variables
+        let isUserSignedIn = false; 
+        // Stores student identity if logged in: { student_id: '...', first_name: '...', last_name: '...' }
+        let currentStudentIdentity = null; 
+        // 'form' or 'delete'
+        let currentView = 'form'; 
+
+        // Function to switch between the main views
+        function renderView() {
+            if (currentView === 'delete' && currentStudentIdentity) {
+                formView.classList.add('hidden');
+                deleteView.classList.remove('hidden');
+                document.title = 'Account Management';
+            } else {
+                currentView = 'form'; // Ensure we default back to form view
+                formView.classList.remove('hidden');
+                deleteView.classList.add('hidden');
+                document.title = 'davidsfriends';
+            }
+        }
+
+        // Function to update the UI based on auth state
+        function updateAuthStatus(userId) {
+            isUserSignedIn = !!userId;
+            authStatusElement.disabled = false;
+            
+            // Define the class for visual centering compensation (Moves form up 1rem)
+            // REMOVING dynamic compensation logic based on user feedback
+            
+            // Clear previous styles and set core interactive styles
+            authStatusElement.className = 'fixed top-4 right-4 text-xs font-semibold px-3 py-1 rounded-full shadow-lg transition duration-150 ease-in-out cursor-pointer hover:shadow-xl';
+            
+            if (currentStudentIdentity) {
+                // STATE 1: Validated Student (Logged In)
+                authStatusElement.classList.add('bg-green-500', 'text-white', 'hover:bg-green-600');
+                const name = currentStudentIdentity.first_name || 'Student';
+                authStatusElement.textContent = `Log Out (${name})`; 
+                authStatusElement.title = `Logged in as ${name} (ID: ${currentStudentIdentity.student_id}). Click to log out.`;
+                
+                // Show the Account Management Navigation
+                if (deleteNavSection) {
+                    deleteNavSection.style.display = 'block'; 
+                }
+                
+                // Show the correct view (form or delete)
+                renderView();
+                
+            } else {
+                // STATE 2: Anonymous Firebase User or Fully Logged Out
+                authStatusElement.classList.add('bg-blue-200', 'text-blue-800', 'hover:bg-blue-300');
+                authStatusElement.textContent = 'Sign In'; 
+                authStatusElement.title = `Click to sign in with your Student ID.`;
+                
+                // Hide the Account Management Navigation
+                if (deleteNavSection) {
+                    deleteNavSection.style.display = 'none';
+                }
+
+                // Always default to form view when not authenticated
+                currentView = 'form';
+                renderView();
+            }
+        }
+
+        // Function to handle the click event on the status button (Opens Modal or Logs Out)
+        function handleAuthClick() {
+            if (currentStudentIdentity) {
+                // If validated as a student, log out fully 
+                authStatusElement.disabled = true;
+                authStatusElement.textContent = 'Logging Out...';
+                currentStudentIdentity = null; 
+                currentView = 'form';
+                
+                messageArea.textContent = '';
+                
+                signOut(auth)
+                    .then(() => {
+                        console.log('Successfully signed out of Firebase.');
+                        updateAuthStatus(auth.currentUser?.uid);
+                    })
+                    .catch(error => {
+                        console.error('Sign Out Error:', error);
+                        updateAuthStatus(auth.currentUser?.uid); 
+                    });
+            } else {
+                // If not validated as a student, open the modal for login
+                document.getElementById('login-modal').classList.remove('hidden');
+                document.getElementById('modal-student-id').focus();
+            }
+        }
+
+        // Function to handle the student ID submission from the modal
+        async function handleStudentLoginSubmit(event) {
+            event.preventDefault();
+            const studentIdInput = document.getElementById('modal-student-id');
+            const modalMessageArea = document.getElementById('modal-message-area');
+            const modalSubmitButton = document.getElementById('modal-submit-button');
+
+            const studentId = studentIdInput.value.trim();
+
+            if (!studentId) {
+                modalMessageArea.textContent = 'Please enter your Student ID.';
+                modalMessageArea.className = 'text-sm text-center text-red-600 font-medium mt-2';
+                return;
+            }
+
+            modalSubmitButton.disabled = true;
+            modalSubmitButton.textContent = 'Validating...';
+            modalMessageArea.textContent = '';
+
+            // 1. Fetch data from Supabase
+            const { data: students, error } = await supabaseClient
+                .from('students')
+                .select('student_id, first_name, last_name') // Fetch first_name and last_name
+                .eq('student_id', studentId)
+                .limit(1);
+
+            if (error) {
+                console.error('Supabase Login Error:', error);
+                modalMessageArea.textContent = 'Error contacting database.';
+            } else if (students && students.length === 1) {
+                // 2. Success! Set the student identity
+                const student = students[0];
+                currentStudentIdentity = student;
+                
+                if (!auth.currentUser) {
+                    await signInAnonymously(auth).catch(err => console.error("Anonymous Sign-in failed post-validation:", err));
+                }
+
+                // Update the main UI and close the modal
+                updateAuthStatus(auth.currentUser?.uid);
+                document.getElementById('login-modal').classList.add('hidden');
+                
+                messageArea.textContent = `Welcome back, ${student.first_name || 'student'}!`;
+                messageArea.className = 'text-sm text-center text-green-700 font-medium';
+                
+                studentIdInput.value = '';
+                setTimeout(() => messageArea.textContent = '', 3000);
+            } else {
+                // 3. Student ID not found
+                modalMessageArea.textContent = 'Student ID not found in the system.';
+                modalMessageArea.className = 'text-sm text-center text-red-600 font-medium mt-2';
+            }
+            
+            // Reset modal state
+            modalSubmitButton.disabled = false;
+            modalSubmitButton.textContent = 'Sign In';
+        }
+        
+        // Function to handle account deletion confirmation
+        async function handleDeleteAccount(event) {
+            event.preventDefault();
+            const form = event.target;
+            // Get elements from the confirmation modal (now two fields for name)
+            const studentIdInput = form.elements['confirm-delete-student-id'];
+            const firstNameInput = form.elements['confirm-delete-first-name'];
+            const lastNameInput = form.elements['confirm-delete-last-name'];
+            const deleteMessageArea = document.getElementById('confirm-delete-message-area');
+            const confirmButton = document.getElementById('confirm-delete-button');
+
+            const enteredId = studentIdInput.value.trim();
+            const enteredFirstName = firstNameInput.value.trim();
+            const enteredLastName = lastNameInput.value.trim();
+            const studentIdToDelete = currentStudentIdentity?.student_id;
+            
+            // Get the expected names from the stored identity
+            const storedFirstName = currentStudentIdentity?.first_name || '';
+            const storedLastName = currentStudentIdentity?.last_name || '';
+
+
+            if (!studentIdToDelete || !currentStudentIdentity) {
+                deleteMessageArea.textContent = 'Error: Session expired. Please log out and sign in again.';
+                deleteMessageArea.className = 'text-sm text-center text-red-600 font-medium mt-2';
+                return;
+            }
+
+            // 1. Validation Check (must match ID, First Name, and Last Name)
+            const idMatch = enteredId === studentIdToDelete;
+            const firstNameMatch = enteredFirstName.toLowerCase() === storedFirstName.toLowerCase();
+            const lastNameMatch = enteredLastName.toLowerCase() === storedLastName.toLowerCase();
+
+            if (!idMatch || !firstNameMatch || !lastNameMatch) {
+                deleteMessageArea.textContent = 'Error: The Student ID, First Name, or Last Name does not match your logged-in account.';
+                deleteMessageArea.className = 'text-sm text-center text-red-600 font-medium mt-2';
+                return;
+            }
+
+            confirmButton.disabled = true;
+            confirmButton.textContent = 'Permanently Deleting...';
+            deleteMessageArea.textContent = '';
+            deleteMessageArea.className = '';
+
+            // 2. Perform Supabase Deletion
+            const { error } = await supabaseClient
+                .from('students')
+                .delete()
+                .eq('student_id', studentIdToDelete);
+
+            if (error) {
+                console.error('Supabase Deletion Error:', error);
+                deleteMessageArea.textContent = 'Error deleting account. Please check database permissions.';
+                deleteMessageArea.className = 'text-sm text-center text-red-600 font-medium mt-2';
+                confirmButton.disabled = false;
+                confirmButton.textContent = 'Confirm Delete';
+            } else {
+                // 3. Success! Log out and reset views
+                deleteMessageArea.textContent = 'Account successfully deleted. Closing modal and logging out...';
+                deleteMessageArea.className = 'text-sm text-center text-green-700 font-medium mt-2';
+                
+                // Clear state
+                currentStudentIdentity = null;
+                
+                // Perform Firebase Sign Out
+                await signOut(auth).catch(err => console.error("Firebase Sign-out error after Supabase delete:", err));
+                
+                // Show success on main form area and switch view
+                messageArea.textContent = 'Your account has been permanently deleted.';
+                messageArea.className = 'text-sm text-center text-green-700 font-medium';
+                
+                // Close modal and switch back to the main form view
+                document.getElementById('confirm-delete-modal').classList.add('hidden');
+                currentView = 'form';
+                renderView(); 
+                
+                // Reset form inputs and buttons
+                confirmButton.disabled = false;
+                confirmButton.textContent = 'Confirm Delete';
+                form.reset();
+                
+                // Clear success message after a delay
+                setTimeout(() => messageArea.textContent = '', 4000); 
+            }
+        }
+
+
+        // Firebase Auth Listener: Ensures we always have an anonymous user session
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                updateAuthStatus(user.uid);
+            } else {
+                signInAnonymously(auth)
+                    .then(() => console.log('Firebase Anonymous Sign In Successful'))
+                    .catch((error) => {
+                        console.error('Firebase Anonymous Sign In Error:', error.message);
+                        updateAuthStatus(null);
+                    });
+            }
+        });
+        
+        // --- Event Listeners ---
+        document.addEventListener('DOMContentLoaded', () => {
+            authStatusElement.addEventListener('click', handleAuthClick);
+            
+            const studentLoginForm = document.getElementById('student-login-form');
+            if (studentLoginForm) {
+                studentLoginForm.addEventListener('submit', handleStudentLoginSubmit);
+            }
+            
+            // Get the new form element from the confirmation modal
+            const confirmDeleteForm = document.getElementById('confirm-delete-form');
+            if (confirmDeleteForm) {
+                confirmDeleteForm.addEventListener('submit', handleDeleteAccount);
+            }
+
+            // Navigation button to the Delete View (visible when logged in)
+            const goToDeleteButton = document.getElementById('go-to-delete-button');
+            if (goToDeleteButton) {
+                 goToDeleteButton.addEventListener('click', () => {
+                    currentView = 'delete';
+                    renderView();
+                 });
+            }
+
+            // Button in the Delete View that OPENS the Confirmation Modal
+            const openConfirmDeleteButton = document.getElementById('open-confirm-delete-button');
+            if (openConfirmDeleteButton) {
+                openConfirmDeleteButton.addEventListener('click', () => {
+                    if (currentStudentIdentity) {
+                         // --- CLEAR ALL CONFIRMATION FIELDS ---
+                         // 1. CLEAR Student ID (user must enter it manually)
+                        document.getElementById('confirm-delete-student-id').value = '';
+                        
+                        // 2. CLEAR First Name
+                        document.getElementById('confirm-delete-first-name').value = '';
+                        
+                        // 3. CLEAR Last Name
+                        document.getElementById('confirm-delete-last-name').value = '';
+                        
+                        // 4. Clear any previous error message
+                        document.getElementById('confirm-delete-message-area').textContent = '';
+                        
+                        document.getElementById('confirm-delete-modal').classList.remove('hidden');
+                        document.getElementById('confirm-delete-student-id').focus(); // Focus on the first field user needs to enter
+                    } else {
+                        // Should not happen if UI is correct, but safe guard
+                        messageArea.textContent = 'Error: Please sign in first.';
+                        messageArea.className = 'text-sm text-center text-red-600 font-medium';
+                        currentView = 'form';
+                        renderView();
+                    }
+                });
+            }
+
+            // Back button from Delete View
+            const backToFormButton = document.getElementById('back-to-form-button');
+            if (backToFormButton) {
+                backToFormButton.addEventListener('click', () => {
+                    currentView = 'form';
+                    renderView();
+                });
+            }
+
+
+            // Close modal handlers (for both login and delete modals)
+            document.querySelectorAll('.close-modal').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    // Find the parent backdrop and hide it
+                    const modal = e.target.closest('.modal-backdrop');
+                    if (modal) {
+                         modal.classList.add('hidden');
+                         // Clear error messages on close
+                         if (modal.id === 'login-modal') {
+                             document.getElementById('modal-message-area').textContent = '';
+                         } else if (modal.id === 'confirm-delete-modal') {
+                             document.getElementById('confirm-delete-message-area').textContent = '';
+                             document.getElementById('confirm-delete-form').reset();
+                             document.getElementById('confirm-delete-button').disabled = false;
+                             document.getElementById('confirm-delete-button').textContent = 'Confirm Delete';
+                         }
+                    }
+                });
+            });
+        });
+
+        // Form Submission Handler (Main Form) - Register New Student
         studentForm.addEventListener('submit', async (event) => {
             event.preventDefault(); 
 
-            // Disable button and show loading text
             submitButton.disabled = true;
-            submitButton.textContent = 'Submitting...'; // Reverted loading message
+            submitButton.textContent = 'Submitting...'; 
             messageArea.textContent = ''; 
 
-            // Get form values
+            // Get form values (now two separate fields for name)
             const studentId = document.getElementById('student-id').value;
-            const fullName = document.getElementById('full-name').value.trim();
+            const firstName = document.getElementById('first-name').value.trim(); // New
+            const lastName = document.getElementById('last-name').value.trim();   // New
             const schoolEmail = document.getElementById('school-email').value;
             const gradeLevel = document.getElementById('grade-level').value; 
             
-            // --- Logic to split Full Name ---
-            let firstName = '';
-            let lastName = '';
-            const nameParts = fullName.split(/\s+/).filter(p => p.length > 0);
-            
-            if (nameParts.length > 0) {
-                firstName = nameParts[0]; 
-            }
-            if (nameParts.length > 1) { 
-                lastName = nameParts.slice(1).join(' '); 
-            }
-            // ---------------------------------
-
-            // 4. Send data to Supabase (referral_id column is excluded from the insert)
+            // Send data to Supabase 
             const { error } = await supabaseClient
                 .from('students')
                 .insert([
@@ -184,12 +397,10 @@
                         last_name: lastName,   
                         school_email: schoolEmail,
                         grade_level: gradeLevel,
-                        // referral_id is now implicitly null in the database or left out
                     }
                 ]);
 
             if (error) {
-                // Handle error
                 console.error('Error inserting data:', error);
                 
                 let errorMessage = `Error: Submission failed.`;
@@ -223,11 +434,10 @@
                 }, 3000); 
             }
         });
-
+        
         // ----------------------------------------------------
         // Interactive Background Script (Subtle Magenta Network)
         // ----------------------------------------------------
-
         const canvas = document.getElementById('interactive-bg');
         const ctx = canvas.getContext('2d');
         let width, height;
@@ -241,7 +451,6 @@
 
         function createParticles() {
             particles = [];
-            // Particle density is still high, but colors are light
             const count = Math.floor((width * height) / 7000); 
             for (let i = 0; i < count; i++) {
                 particles.push({
@@ -250,17 +459,14 @@
                     radius: Math.random() * 1.8 + 0.8, 
                     vx: (Math.random() - 0.5) * 0.4, 
                     vy: (Math.random() - 0.5) * 0.4,
-                    // Magenta color for dots (subtle complement to teal)
                     color: `rgba(255, 0, 150, 0.5)` 
                 });
             }
         }
 
         function draw() {
-            // Clear the canvas on each frame
             ctx.clearRect(0, 0, width, height);
 
-            // Maximum distance for drawing a connecting line
             const connectionDistance = 150; 
 
             particles.forEach((p, i) => {
@@ -268,7 +474,6 @@
                 p.x += p.vx;
                 p.y += p.vy;
 
-                // Simple boundary bounce
                 if (p.x < 0 || p.x > width) p.vx *= -1;
                 if (p.y < 0 || p.y > height) p.vy *= -1;
 
@@ -291,11 +496,9 @@
                     const dist = Math.sqrt(dx * dx + dy * dy);
 
                     if (dist < connectionDistance) {
-                        // Calculate opacity based on distance (closer = brighter line)
                         const opacity = 1 - (dist / connectionDistance); 
 
                         ctx.beginPath();
-                        // Very subtle magenta lines
                         ctx.strokeStyle = `rgba(255, 0, 150, ${opacity * 0.2})`; 
                         ctx.lineWidth = 0.8; 
                         ctx.moveTo(p.x, p.y);
@@ -324,7 +527,6 @@
             mouse.y = e.clientY;
         });
         
-        // Handle touch moves for mobile interaction
         document.addEventListener('touchmove', (e) => {
              if (e.touches.length > 0) {
                 mouse.x = e.touches[0].clientX;
@@ -337,6 +539,310 @@
         createParticles();
         draw();
     </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow: hidden; /* Prevent ALL scrolling (horizontal and vertical) */
+        }
+        #interactive-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.6; 
+        }
+        .content-container {
+            position: relative;
+            z-index: 10;
+        }
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 50;
+        }
+    </style>
+    <!-- Include Inter font from Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<!-- UPDATED: Use grid place-items-center on the body to ensure content is fully centered vertically and horizontally -->
+<body class="bg-teal-100 min-h-screen grid place-items-center">
+
+    <!-- Auth Status Button (Log In/Log Out) -->
+    <button id="auth-status" class="fixed top-4 right-4 text-xs font-semibold px-3 py-1 rounded-full shadow-lg transition duration-150 ease-in-out cursor-pointer hover:shadow-xl">
+        Signing In...
+    </button>
+
+    <!-- Interactive Background Canvas -->
+    <canvas id="interactive-bg"></canvas>
+
+    <!-- ============================================== -->
+    <!-- MAIN CONTENT CONTAINER (Toggles between views) -->
+    <!-- ============================================== -->
+    <!-- Removed top and bottom padding, letting the grid centering handle spacing -->
+    <div class="content-container w-full max-w-md my-8">
+
+        <!-- --------------------------------- -->
+        <!-- 1. REGISTRATION / MAIN FORM VIEW  -->
+        <!-- --------------------------------- -->
+        <!-- Using transition-all for a smooth height change (no transform needed) -->
+        <div id="form-view" class="bg-white p-6 rounded-xl shadow-2xl transition-all duration-300 ease-out">
+            
+            <!-- HEADER SECTION -->
+            <div class="mb-6 text-center">
+                <!-- CORRECTED TITLE -->
+                <h1 class="text-3xl font-bold text-blue-600">Hello, my friends sign here</h1>
+            </div>
+            <!-- END HEADER SECTION -->
+            
+            <form id="student-form" action="#" method="POST">
+                <div class="space-y-4">
+                    
+                    <!-- Student ID Field -->
+                    <div>
+                        <label for="student-id" class="block text-sm font-medium text-gray-700">Student ID</label> 
+                        <div class="mt-1">
+                            <input type="text" name="student-id" id="student-id" 
+                                class="block w-full rounded-md border-gray-300 bg-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-3 border text-gray-900"
+                                placeholder="12345678" required>
+                        </div>
+                    </div>
+                    
+                    <!-- FIRST NAME Field -->
+                    <div>
+                        <label for="first-name" class="block text-sm font-medium text-gray-700">First Name</label>
+                        <div class="mt-1">
+                            <input type="text" name="first-name" id="first-name" 
+                                autocomplete="given-name"
+                                class="block w-full rounded-md border-gray-300 bg-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-3 border text-gray-900"
+                                placeholder="Jane" required>
+                        </div>
+                    </div>
+
+                    <!-- LAST NAME Field -->
+                    <div>
+                        <label for="last-name" class="block text-sm font-medium text-gray-700">Last Name</label>
+                        <div class="mt-1">
+                            <input type="text" name="last-name" id="last-name" 
+                                autocomplete="family-name"
+                                class="block w-full rounded-md border-gray-300 bg-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-3 border text-gray-900"
+                                placeholder="Doe" required>
+                        </div>
+                    </div>
+
+                    <!-- School Email Field -->
+                    <div>
+                        <label for="school-email" class="block text-sm font-medium text-gray-700">School Email</label>
+                        <div class="mt-1">
+                            <input id="school-email" name="school-email" type="email" 
+                                autocomplete="email"
+                                class="block w-full rounded-md border-gray-300 bg-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-3 border text-gray-900"
+                                placeholder="jane.doe@school.edu" required>
+                        </div>
+                    </div>
+                    
+                    <!-- Grade Level Dropdown -->
+                    <div>
+                        <label for="grade-level" class="block text-sm font-medium text-gray-700">Current Grade Level</label>
+                        <div class="mt-1">
+                            <select id="grade-level" name="grade-level" required
+                                    class="block w-full rounded-md border-gray-300 bg-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-3 border text-gray-900">
+                                <option value="">-- Select Grade --</option>
+                                <option value="K">Kindergarten</option>
+                                <option value="1">1st Grade</option>
+                                <option value="2">2nd Grade</option>
+                                <option value="3">3rd Grade</option>
+                                <option value="4">4th Grade</option>
+                                <option value="5">5th Grade</option>
+                                <option value="6">6th Grade</option>
+                                <option value="7">7th Grade</option>
+                                <option value="8">8th Grade</option>
+                                <option value="9">9th Grade</option>
+                                <option value="10">10th Grade</option>
+                                <option value="11">11th Grade</option>
+                                <option value="12">12th Grade</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Submit Button -->
+                    <div>
+                        <button type="submit" id="submit-button"
+                                class="flex w-full justify-center rounded-md border border-transparent bg-blue-600 py-3 px-4 text-sm font-medium text-white shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white disabled:opacity-50 transition duration-150 ease-in-out">
+                            Submit
+                        </button>
+                    </div>
+
+                    <!-- Message area for success or error -->
+                    <div id="message-area" class="text-sm text-center"></div>
+                    
+                </div>
+            </form>
+
+            <!-- NAVIGATION BUTTON TO DELETE ACCOUNT -->
+            <div id="delete-nav-section" class="mt-6 pt-4 border-t border-gray-200" style="display: none;">
+                <!-- Updated button style: white with blue border and text -->
+                <button id="go-to-delete-button" class="flex w-full justify-center rounded-md border-2 border-blue-600 bg-white py-2 px-4 text-sm font-medium text-blue-600 shadow-sm hover:bg-blue-50 transition duration-150 ease-in-out" title="Manage or delete your student record.">
+                    Go to Account Management
+                </button>
+            </div>
+            
+        </div>
+        
+        <!-- --------------------------------- -->
+        <!-- 2. ACCOUNT DELETION VIEW (SIMPLIFIED) -->
+        <!-- --------------------------------- -->
+        <div id="delete-view" class="hidden bg-white p-6 rounded-xl shadow-2xl">
+            
+            <div class="mb-6 text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-16 h-16 text-red-500 mx-auto mb-4">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.021 3.377 1.87 3.377h14.426c1.849 0 2.736-1.877 1.87-3.377L13.513 2.628a1.5 1.5 0 00-2.626 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                </svg>
+                <h1 class="text-3xl font-bold text-red-600">Account Management</h1>
+                <p class="text-gray-600 mt-2">Manage your student record here.</p>
+                <p class="text-sm text-red-500 mt-4 font-medium">Warning: Deletion is permanent and cannot be undone.</p>
+            </div>
+            
+            <!-- Button to trigger the confirmation modal -->
+            <button id="open-confirm-delete-button"
+                    class="flex w-full justify-center rounded-md border border-transparent bg-red-600 py-3 px-4 text-sm font-medium text-white shadow-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-white transition duration-150 ease-in-out">
+                Delete Account
+            </button>
+            
+            <!-- Back Button -->
+            <div class="mt-6 pt-4 border-t border-gray-200">
+                <button id="back-to-form-button" class="flex w-full justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 transition duration-150 ease-in-out">
+                    &#x2190; Back to Registration
+                </button>
+            </div>
+            
+        </div>
+        <!-- --------------------------------- -->
+        <!-- END ACCOUNT DELETION VIEW         -->
+        <!-- --------------------------------- -->
+
+    </div>
+
+
+    <!-- LOGIN MODAL/OVERLAY (Remains the same) -->
+    <div id="login-modal" class="modal-backdrop hidden">
+        <div class="bg-gray-50 p-8 rounded-xl shadow-2xl w-full max-w-sm relative transform transition-all duration-300 scale-100 opacity-100">
+            
+            <button id="close-modal-login" class="close-modal absolute top-3 right-3 text-gray-500 hover:text-gray-800 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6 pointer-events-none">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+
+            <div class="mb-6 text-center">
+                <h2 class="text-2xl font-bold text-gray-800 mb-1">Student Sign In</h2>
+                <p class="text-sm text-gray-500">Enter your official Student ID to log in.</p>
+            </div>
+
+            <form id="student-login-form" action="#" method="POST">
+                <div class="space-y-4">
+                    
+                    <!-- Student ID Field for Login -->
+                    <div>
+                        <label for="modal-student-id" class="block text-sm font-medium text-gray-700">Student ID</label> 
+                        <div class="mt-1">
+                            <input type="text" name="modal-student-id" id="modal-student-id" 
+                                   class="block w-full rounded-md border-gray-300 bg-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-3 border text-gray-900"
+                                   placeholder="Your 8-digit ID" required>
+                        </div>
+                    </div>
+                    
+                    <!-- Sign In Button -->
+                    <div>
+                        <button type="submit" id="modal-submit-button"
+                                class="flex w-full justify-center rounded-md border border-transparent bg-blue-600 py-3 px-4 text-sm font-medium text-white shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white disabled:opacity-50 transition duration-150 ease-in-out">
+                            Sign In
+                        </button>
+                    </div>
+
+                    <!-- Message area for success or error in the modal -->
+                    <div id="modal-message-area" class="text-sm text-center"></div>
+                    
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- END LOGIN MODAL/OVERLAY -->
+    
+    <!-- NEW: CONFIRM DELETE MODAL/OVERLAY -->
+    <div id="confirm-delete-modal" class="modal-backdrop hidden">
+        <div class="bg-gray-50 p-8 rounded-xl shadow-2xl w-full max-w-sm relative transform transition-all duration-300 scale-100 opacity-100">
+            
+            <button id="close-delete-modal" class="close-modal absolute top-3 right-3 text-gray-500 hover:text-gray-800 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6 pointer-events-none">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+
+            <div class="mb-6 text-center">
+                <h2 class="text-2xl font-bold text-red-700 mb-1">Confirm Account Deletion</h2>
+                <p class="text-sm text-gray-500">This action is permanent. Please confirm your identity by re-entering your student ID, first name, and last name.</p>
+            </div>
+
+            <form id="confirm-delete-form" action="#" method="POST">
+                <div class="space-y-4">
+                    
+                    <!-- Student ID Field for Confirmation (Manual entry required) -->
+                    <div>
+                        <label for="confirm-delete-student-id" class="block text-sm font-medium text-gray-700">Student ID</label> 
+                        <div class="mt-1">
+                            <input type="text" name="confirm-delete-student-id" id="confirm-delete-student-id" 
+                                class="block w-full rounded-md border-gray-300 bg-white shadow-sm focus:border-red-500 focus:ring-red-500 sm:text-sm p-3 border text-gray-900"
+                                placeholder="Re-enter your Student ID" required>
+                        </div>
+                    </div>
+                    
+                    <!-- FIRST NAME Field for Confirmation (Manual entry required) -->
+                    <div>
+                        <label for="confirm-delete-first-name" class="block text-sm font-medium text-gray-700">First Name</label>
+                        <div class="mt-1">
+                            <input type="text" name="confirm-delete-first-name" id="confirm-delete-first-name" 
+                                class="block w-full rounded-md border-gray-300 bg-white shadow-sm focus:border-red-500 focus:ring-red-500 sm:text-sm p-3 border text-gray-900"
+                                placeholder="Re-enter your First Name" required>
+                        </div>
+                    </div>
+                    
+                    <!-- LAST NAME Field for Confirmation (Manual entry required) -->
+                    <div>
+                        <label for="confirm-delete-last-name" class="block text-sm font-medium text-gray-700">Last Name</label>
+                        <div class="mt-1">
+                            <input type="text" name="confirm-delete-last-name" id="confirm-delete-last-name" 
+                                class="block w-full rounded-md border-gray-300 bg-white shadow-sm focus:border-red-500 focus:ring-red-500 sm:text-sm p-3 border text-gray-900"
+                                placeholder="Re-enter your Last Name" required>
+                        </div>
+                    </div>
+                    
+                    <!-- Confirm Delete Button -->
+                    <div>
+                        <button type="submit" id="confirm-delete-button"
+                                class="flex w-full justify-center rounded-md border border-transparent bg-red-600 py-3 px-4 text-sm font-medium text-white shadow-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-white disabled:opacity-50 transition duration-150 ease-in-out">
+                            Confirm Delete
+                        </button>
+                    </div>
+
+                    <!-- Message area for confirmation status -->
+                    <div id="confirm-delete-message-area" class="text-sm text-center"></div>
+                    
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- END CONFIRM DELETE MODAL/OVERLAY -->
 
 </body>
 </html>
