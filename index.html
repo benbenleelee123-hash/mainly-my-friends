@@ -278,7 +278,7 @@
                     if (error.code === '23505') errorMessage = "Error: You are already registered!";
                     setMessage({ text: errorMessage, type: 'error' });
                 } else {
-                    setMessage({ text: 'Registration successful!you can now sign in pookie.', type: 'success' });
+                    setMessage({ text: 'Registration successful! You can now sign in pookie.', type: 'success' });
                     event.target.reset();
                     setTimeout(() => setMessage(null), 10000);
                 }
@@ -489,4 +489,5 @@
     </script>
 </body>
 </html>
+
 
