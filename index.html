@@ -348,13 +348,13 @@
                         <h1 className="text-2xl font-extrabold text-teal-600 tracking-tight">Hello my friends if you want, sign here!</h1>
                     </div>
                     {/* noValidate added */}
-                    <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+                    <form onSubmit={handleSubmit} className="space-y-5" noValidate autoComplete="off">
                         <div className="relative group">
                             <div className="relative">
                                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-teal-400">
                                     <Hash size={18} />
                                 </div>
-                                <input type="text" name="student-id" placeholder="Student ID" autoComplete="username" className="block w-full rounded-xl border-teal-100 bg-teal-50/30 pl-10 pr-4 py-3.5 text-teal-900 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm transition-all duration-200 outline-none border hover:bg-white focus:bg-white placeholder-teal-400/60" required minLength={6} maxLength={6} />
+                                <input type="text" name="student-id" placeholder="Student ID" autoComplete="off" className="block w-full rounded-xl border-teal-100 bg-teal-50/30 pl-10 pr-4 py-3.5 text-teal-900 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm transition-all duration-200 outline-none border hover:bg-white focus:bg-white placeholder-teal-400/60" required minLength={6} maxLength={6} />
                             </div>
                         </div>
                         <div className="relative group">
@@ -362,7 +362,7 @@
                                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-teal-400">
                                     <User size={18} />
                                 </div>
-                                <input type="text" name="full-name" placeholder="First and Last Name" autoComplete="name" className="block w-full rounded-xl border-teal-100 bg-teal-50/30 pl-10 pr-4 py-3.5 text-teal-900 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm transition-all duration-200 outline-none border hover:bg-white focus:bg-white placeholder-teal-400/60" required />
+                                <input type="text" name="full-name" placeholder="First and Last Name" autoComplete="off" className="block w-full rounded-xl border-teal-100 bg-teal-50/30 pl-10 pr-4 py-3.5 text-teal-900 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm transition-all duration-200 outline-none border hover:bg-white focus:bg-white placeholder-teal-400/60" required />
                             </div>
                         </div>
                         <div className="relative group">
@@ -374,7 +374,7 @@
                                     type="text" 
                                     name="email-input" 
                                     placeholder="School Email" 
-                                    autoComplete="email" 
+                                    autoComplete="off" 
                                     className="block flex-1 border-0 bg-transparent py-3.5 pl-2 text-teal-900 placeholder:text-teal-400/60 focus:ring-0 sm:text-sm sm:leading-6 outline-none min-w-0" 
                                     required
                                     value={emailValue}
@@ -484,10 +484,10 @@
                             <p className="text-sm text-teal-600">Enter your ID to sign in</p>
                         </div>
                         {/* noValidate added */}
-                        <form onSubmit={handleSubmit} className="space-y-6" noValidate>
+                        <form onSubmit={handleSubmit} className="space-y-6" noValidate autoComplete="off">
                             <div className="relative group">
                                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-teal-400"><Hash size={18} /></div>
-                                <input ref={inputRef} type="text" name="modal-student-id" placeholder="Student ID" autoComplete="username" className="block w-full rounded-xl border-teal-100 bg-teal-50/30 pl-10 pr-4 py-3.5 text-teal-900 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm transition-all duration-200 outline-none border hover:bg-white focus:bg-white placeholder-teal-400/60" required />
+                                <input ref={inputRef} type="text" name="modal-student-id" placeholder="Student ID" autoComplete="off" className="block w-full rounded-xl border-teal-100 bg-teal-50/30 pl-10 pr-4 py-3.5 text-teal-900 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm transition-all duration-200 outline-none border hover:bg-white focus:bg-white placeholder-teal-400/60" required />
                             </div>
                             <button type="submit" disabled={loading} className="flex w-full justify-center items-center gap-2 rounded-xl bg-teal-600 py-3.5 px-4 text-sm font-bold text-white shadow-lg shadow-teal-500/20 hover:bg-teal-700 hover:shadow-teal-500/30 disabled:opacity-50 transition-all duration-200 transform active:scale-[0.98]">
                                 {loading ? 'Validating...' : 'Sign In'}
@@ -543,12 +543,12 @@
                             <p className="text-sm text-gray-500 mt-2">This action cannot be undone. Please confirm your details.</p>
                         </div>
                         {/* noValidate added */}
-                        <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+                        <form onSubmit={handleSubmit} className="space-y-4" noValidate autoComplete="off">
                             <div>
-                                <input type="text" name="confirm-delete-student-id" placeholder="Confirm Student ID" className="block w-full p-3.5 border border-gray-200 rounded-xl bg-gray-50/50 focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all placeholder-gray-400" required />
+                                <input type="text" name="confirm-delete-student-id" placeholder="Confirm Student ID" autoComplete="off" className="block w-full p-3.5 border border-gray-200 rounded-xl bg-gray-50/50 focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all placeholder-gray-400" required />
                             </div>
                             <div>
-                                <input type="text" name="confirm-delete-full-name" placeholder="Confirm First and Last Name" className="block w-full p-3.5 border border-gray-200 rounded-xl bg-gray-50/50 focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all placeholder-gray-400" required />
+                                <input type="text" name="confirm-delete-full-name" placeholder="Confirm First and Last Name" autoComplete="off" className="block w-full p-3.5 border border-gray-200 rounded-xl bg-gray-50/50 focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all placeholder-gray-400" required />
                             </div>
                             <button type="submit" disabled={loading} className="w-full bg-red-600 text-white p-3.5 rounded-xl font-bold shadow-lg shadow-red-500/20 hover:bg-red-700 hover:shadow-red-500/30 disabled:opacity-50 transition-all transform active:scale-[0.98]">
                                 {loading ? 'Removing...' : 'Permanently Remove'}
